@@ -1,0 +1,33 @@
+{
+  "runTime": 500000,
+  "experimentCount": 50,
+  "outputInterval": 600,
+  "outputFile": "-",
+  "simulation": {
+    "agents": 100,
+    "seed": 0,
+    "models": {
+      "mobilityModel": "levy",
+      "identificationModel": "dummy",
+      "infectionModel": "serial"
+    },
+    "params": {
+      "mobModel": {
+        "bounds": [
+          1000,
+          1000
+        ],
+        "flightLengthCoefficient": 1.02,
+        "pauseTimeCoefficient": 0.80,
+        "maxPause": 9000
+      },
+      "idModel": null,
+      "infModel": {
+        "initialInfectionCount": 1,
+        "infectionDistance": 10,
+        "infectionTime": 10,
+        "susceptibilityRate": 1.0
+      }
+    }
+  }
+}

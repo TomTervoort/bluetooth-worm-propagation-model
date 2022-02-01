@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Propagation model web UI</title>
+  <meta charset="utf-8">
+  <script src="app.js"></script>
+  <style>
+    input {
+      width: 10em;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h2>Malware propagation simulation</h2>
+    <p>
+      Simulation step: <span id="step-count">(not running)</span>
+      <button type="button" id="start-button">Start</button>
+      <button type="button" id="runpause-button" disabled>Run</button>
+      <button type="button" id="step-button" disabled>Step</button>
+      <button type="button" id="multistep-button" disabled>Multi-Step</button><br/>
+      <label>Speed: <input type="number" id="simulation-speed" min="1" value="10"> step/s</label><br/>
+      Display size: <button type="button" id="upsize-button">+</button>
+      <button type="button" id="downsize-button">-</button>
+    </p>
+  </section>
+  <section style="float: left">
+    <div><span id="error-message" style="color: red"></span></div>
+    <div>
+      <canvas id="simulation-display" style="border-style: solid" width="600" height="600"></canvas>
+      <ul style="list-style-type: none; width: 15em">
+        <li id="legend-infected"><span class="legend-dot">●</span> Infected<span class="legend-count" style="float: right"></span></li>
+        <li id="legend-immune"><span class="legend-dot">●</span> Not suceptible<span class="legend-count" style="float: right"></span></li>
+        <li id="legend-identified"><span class="legend-dot">●</span> Identified (1+ times)<span class="legend-count" style="float: right"></span></li>
+        <li id="legend-identifiable" style="display: none"><span class="legend-dot">●</span> Discoverable<span class="legend-count" style="float: right"></span></li>
+        <li id="legend-notIdentifiable"><span class="legend-dot">●</span> Not identified<span class="legend-count" style="float: right"></span></li>
+      </ul>
+    </div>
+  </section>
+  <section style="float: right">
+    <div>
+      <button type="button" id="save-button">Save</button>
+      <button type="button" id="load-button" disabled>Load</button>
+    </div>
+    <form id="param-form">
+      <h2>Parameters</h2>
+      <label>Area dimensions: <input name="area-width" type="number" min="1" value="1000"> x </label>
+      <label><input name="area-height" type="number" min="1" value="1000"> m</label><br/>
+      <label>Total agents: <input name="agents-total" type="number" min="0" value="100"></label><br/>
+      <label>Simulation seed: <input name="seed" type="number" min="0" max="2147483647"></label>
+      <button type="button" name="refresh-seed-button">Refresh</button><br/>
+      <fieldset>
+        <legend>Mobility model</legend>
+        <select class="model-switcher" name="mobilityModel">
+          <option value="levy" selected>Lévy walk</option>
+          <option value="bsa">BSA</option>
+          <option value="smooth">SMOOTH</option>
+        </select>
+        <div class="levy-params">
+          <label>Coefficients: α <input name="levy-flightLengthCoefficient" type="number" min="0" max="2" step="0.01" value="0.86"></label>;
+          <label>β <input name="levy-pauseTimeCoefficient" type="number" min="0" max="2" step="0.01" value="0.99"></label><br/>
+          <label>Pause truncation: <input name="levy-maxPause" type="number" min="0" value="25800"></label> s<br/>
+          <label>Standard set:
+            <select id="levy-paramset">
+              <option value="">---</option>
+              <option value="ncsu"  data-a="0.86" data-b="0.99" data-t="25800" selected>NCSU (American campus)</option>
+              <option value="nyc"   data-a="0.66" data-b="0.49" data-t="40200">NYC (New York)</option>
+              <option value="dw"    data-a="1.02" data-b="0.80" data-t="9000">DW (Disney World)</option>
+              <option value="kaist" data-a="0.97" data-b="0.45" data-t="1620">KAIST (Korean campus)</option>
+              <option value="bm"    data-a="2.00" data-b="2.00" data-t="100000">Brownian motion</option>
+            </select>
+          </label>
+        </div>
+        <div class="bsa-params" style="display: none">
+          <label>Max. velocity: <input name="bsa-maxVelocity" type="number" min="0" step="0.01" value="2"> m/s</label><br/>
+          <label>Max. accelaration: <input name="bsa-maxAcceleration" type="number" min="0" step="0.01" value="1"> m/s^2</label><br/>
+          <label>Max. angular change: <input name="bsa-maxTurn" type="number" min="0" max="6.29" step="0.01" value="0.17"> radians/s</label><br/>
+        </div>
+        <div class="smooth-params" style="display: none">
+          <label>Waypoint count: <input name="smooth-waypointCount" type="number" min="0" value="700"></label><br/>
+          <label>Cluster count: <input name="smooth-clusterCount" type="number" min="0" max="60" value="10"></label><br/>
+          <label>Agent speed: <input name="smooth-agentSpeed" type="number" min="0" step="0.01" value="1"> m/s</label><br/>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Identification model</legend>
+        <select class="model-switcher" name="identificationModel">
+          <option value="dummy" selected>Dummy</option>
+          <option value="signal">Signal</option>
+          <option value="trigger">Periodic Trigger</option>
+          <option value="trigger+broadcast">Periodic Trigger + Broadcast</option>
+          <option value="trigger+broadcast2">Periodic Trigger + Broadcast + Broadcast</option>
+        </select>
+        <br/>
+        <div class="dummy-params"></div>
+        <div class="signal-params" style="display: none">
+          <p>Signal profiles:</p>
+          <template id="sigprofs" class="rowgroup-template"><tr>
+            <td><input name="sigprof-%-senderPrevalence" type="number" min="0" max="1" step="0.001" value="1"></td>
+            <td><input name="sigprof-%-receiverPrevalence" type="number" min="0" max="1" step="0.001" value="1"></td>
+            <td><input name="sigprof-%-transmissionRange" type="number" min="0" step="0.01" value="10"></td>
+            <td><input name="sigprof-%-signalFrequency" type="number" min="0" step="0.001" max="1" value="0.03"></td>
+            <td><button class="sigprofs-deleter" type="button">-</button></td>
+          </tr></template>
+          <table>
+            <thead><tr><td>Sender frac.</td><td>Receiver frac.</td><td>Range</td><td>Signal freq.</td><td></td></tr></thead>
+            <tbody id="sigprofs-tablebody"></tbody>
+            <tfoot><tr><td><button type="button" id="sigprofs-adder">+</button></td></tr></tfoot>
+          </table>
+        </div>
+        <div class="trigger-params trigger+broadcast-params trigger+broadcast2-params" style="display: none">
+          <label>Discovery time: <input name="id-discoveryTime" type="number" min="0" value="4"></label> s<br/>
+          <label>Discovery distance: <input name="id-transmissionRadius" type="number" min="0" step="0.01" value="10"></label> m<br/>
+          <label>Fraction always discoverable: <input name="id-always" type="number" min="0" max="1" step="0.001" value="0.33"></label><br/>
+          <p>Trigger profiles:</p>
+          <template id="pt-agentgroup" class="rowgroup-template"><tr>
+            <td><input name="pt-group-%-prevalence" type="number" min="0" step="0.001" value="0.5"></td>
+            <td><input name="pt-group-%-frequencyDist-mean" type="number" min="0" max="1" step="0.00001" value="0.01" style="width: 5em"></td>
+            <td><input name="pt-group-%-frequencyDist-stdDev" type="number" min="0" max="1" step="0.00001" value="0.02" style="width: 5em"></td>
+            <td><input name="pt-group-%-discoveryTimeLimit" type="number" min="1" value="120"></td>
+            <td><button class="pt-agentgroup-deleter" type="button">-</button></td>
+          </tr></template>
+          <table>
+            <thead><tr><td>Prevalence</td><td>Freq. 𝜇</td><td>Freq. 𝜎</td><td>Discovery time (s)</td><td></td></tr></thead>
+            <tbody id="pt-agentgroup-tablebody"></tbody>
+            <tfoot><tr><td><button type="button" id="pt-agentgroup-adder">+</button></td></tr></tfoot>
+          </table>          
+        </div>
+        <div class="trigger+broadcast-params trigger+broadcast2-params" style="display: none">
+          <fieldset>
+            <legend>Broadcast model #1</legend>
+            <label>Broadcaster fraction: <input name="bcFraction1" type="number" min="0" max="1" step="0.001" value="0.33"></label><br/>
+            <label>Receiver fraction: <input name="bcRecvFraction1" type="number" min="0" max="1" step="0.001" value="0.5"></label><br/>
+            <label>Broadcast radius: <input name="bcRadius1" type="number" min="0" step="0.01" value="50"></label> m<br/>
+            <label>Broadcasts per second: 𝜇 <input name="bcFreq-mean1" type="number" min="0" max="1" step="0.00001" value="0.1" style="width: 5em"></label>;
+            <label>𝜎 <input name="bcFreq-dev1" type="number" min="0" max="1" step="0.00001" value="0.05" style="width: 5em"></label></br>
+            <label>Identification chance: <input name="bcIdChance1" type="number" min="0" max="1" step="0.001" value="1"></label><br/>
+          </fieldset>
+          <fieldset class="trigger+broadcast2-params" style="display: none">
+            <legend>Broadcast model #2</legend>
+            <label>Broadcaster fraction: <input name="bcFraction2" type="number" min="0" max="1" step="0.001" value="0.9"></label><br/>
+            <label>Receiver fraction: <input name="bcRecvFraction2" type="number" min="0" max="1" step="0.001" value="0.60"></label><br/>
+            <label>Broadcast radius: <input name="bcRadius2" type="number" min="0" step="0.01" value="10"></label> m<br/>
+            <label>Broadcasts per second: 𝜇 <input name="bcFreq-mean2" type="number" min="0" max="1" step="0.00001" value="0.5" style="width: 5em"></label>;
+            <label>𝜎 <input name="bcFreq-dev2" type="number" min="0" max="1" step="0.00001" value="0" style="width: 5em"></label></br>
+            <label>Identification chance: <input name="bcIdChance2" type="number" min="0" max="1" step="0.001" value="0.5"></label><br/>
+          </fieldset>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Infection model</legend>
+        <select class="model-switcher" name="infectionModel">
+          <option value="serial" selected>Serial</option>
+          <option value="simple">Simple</option>
+        </select>
+        <div class="serial-params">
+          <label>Infected agents: <input name="serial-initialInfectionCount" type="number" min="0" value="1"></label><br/>
+          <label>Susceptibility rate: <input name="serial-susceptibilityRate" type="number" min="0" max="1" step="0.01" value="0.6"></label><br/>
+          <label>Infection distance: <input name="serial-infectionDistance" type="number" min="0" step="0.01" value="10"></label> m<br/>
+          <label>Infection time: <input name="serial-infectionTime" type="number" min="0" value="10"></label> s<br/>
+        </div>
+        <div class="simple-params" style="display: none">
+          <label>Infected agents: <input name="simple-initialInfectionCount" type="number" min="0" value="1"></label><br/>
+          <label>Infection distance: <input name="simple-infectionDistance" type="number" min="0" step="0.01" value="10"></label> m<br/>
+          <label>Infection time: <input name="simple-infectionTime" type="number" min="0" value="10"></label> s<br/>
+          <label>Failure chance: <input name="simple-failChance" type="number" min="0" max ="1" step="0.01" value="0"></label><br/>
+        </div>
+      </fieldset>
+    </form>
+  </section>
+</body>
+</html>

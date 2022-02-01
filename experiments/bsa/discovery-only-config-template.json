@@ -1,0 +1,40 @@
+{
+  "runTime": 500000,
+  "experimentCount": 50,
+  "outputInterval": 600,
+  "outputFile": "-",
+  "simulation": {
+    "agents": 100,
+    "seed": 0,
+    "models": {
+      "mobilityModel": "bsa",
+      "identificationModel": "signal",
+      "infectionModel": "serial"
+    },
+    "params": {
+      "mobModel": {
+        "bounds": [
+          1000,
+          1000
+        ],
+        "maxVelocity": 2,
+        "maxAcceleration": 1,
+        "maxTurn": 0.17
+      },
+      "idModel": [
+        {
+          "senderPrevalence": 1,
+          "receiverPrevalence": 1,
+          "transmissionRange": 10,
+          "signalFrequency": 0.03
+        }
+      ],
+      "infModel": {
+        "initialInfectionCount": 1,
+        "infectionDistance": 10,
+        "infectionTime": 10,
+        "susceptibilityRate": 1
+      }
+    }
+  }
+}

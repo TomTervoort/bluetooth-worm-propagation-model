@@ -1,0 +1,52 @@
+{
+  "runTime": 500000,
+  "experimentCount": 50,
+  "outputInterval": 600,
+  "outputFile": "-",
+  "simulation": {
+    "agents": 100,
+    "seed": 0,
+    "models": {
+      "mobilityModel": "levy",
+      "identificationModel": "signal",
+      "infectionModel": "serial"
+    },
+    "params": {
+      "mobModel": {
+        "bounds": [
+          1000,
+          1000
+        ],
+        "flightLengthCoefficient": 0.86,
+        "pauseTimeCoefficient": 0.99,
+        "maxPause": 25800
+      },
+      "idModel": [
+        {
+          "senderPrevalence": 1,
+          "receiverPrevalence": 1,
+          "transmissionRange": 10,
+          "signalFrequency": 0.03
+        },
+        {
+          "senderPrevalence": 1,
+          "receiverPrevalence": 0.5,
+          "transmissionRange": 10,
+          "signalFrequency": 0.15
+        },
+        {
+          "senderPrevalence": 0.17,
+          "receiverPrevalence": 0.5,
+          "transmissionRange": 50,
+          "signalFrequency": 0.02
+        }
+      ],
+      "infModel": {
+        "initialInfectionCount": 1,
+        "infectionDistance": 10,
+        "infectionTime": 10,
+        "susceptibilityRate": 1
+      }
+    }
+  }
+}
