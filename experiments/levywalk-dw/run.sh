@@ -20,5 +20,5 @@ done
 
 cd results
 echo 'type,susceptibility,time,mean infection rate,std. dev' > all.csv
-find *.csv -exec bash -c 'tail -n +2 {} | sed -E s:^:{},:g' \; | sed -E 's:\.csv::g' | sed -E 's:(unrestricted|discovery-only|advanced)-:\1,:g'  >> all.csv
+find *.csv -name '*-?.?.csv' -exec bash -c 'tail -n +2 {} | sed -E s:^:{},:g' \; | sed -E 's:\.csv::g' | sed -E 's:(unrestricted|discovery-only|advanced)-:\1,:g'  >> all.csv
 
