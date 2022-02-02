@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, FunctionalDependencies, FlexibleContexts, MultiWayIf #-}
 
 -- | Implementation of the SMOOTH mobility model by Munjal et al. 
---   See: http://www.eurecom.fr/~spyropou/papers/Smooth-Infocom2011.pdf
+--   See: https://dl.acm.org/doi/abs/10.1145/2068897.2068957
 --   
 --   Agents are initially placed randomly. To avoid initialisation bias, the initialSkipSteps parameter (number of steps 
 --   the agents will move from their random starting point before the simulation officially starts) should be set to 

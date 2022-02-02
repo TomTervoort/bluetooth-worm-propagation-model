@@ -46,7 +46,7 @@ The following mobility, identification and infection models are currently implem
 - Mobility models:
     * [Lévy Walk model by by Rhee et al.](https://ieeexplore.ieee.org/document/5750071)
     * [BSA model by Haas](https://ieeexplore.ieee.org/abstract/document/627227)
-    * [SMOOTH model by Munjal et al.](http://www.eurecom.fr/~spyropou/papers/Smooth-Infocom2011.pdf)
+    * [SMOOTH model by Munjal et al.](https://dl.acm.org/doi/abs/10.1145/2068897.2068957)
 - Identification models:
     * _Dummy_:  all agents are immediately identified by all others
     * _Signal_: signal profile model described in the paper
