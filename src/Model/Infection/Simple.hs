@@ -1,5 +1,7 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, FunctionalDependencies, FlexibleContexts, MultiWayIf #-}
 
+-- | Straightforward custom infection model with parallel spreading and failure probabilities.
+
 module Model.Infection.Simple where
 
 import Model.RNG

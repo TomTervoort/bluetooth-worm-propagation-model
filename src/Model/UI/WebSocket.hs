@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, ExistentialQuantification, ScopedTypeVariables, OverloadedStrings #-}
 
 -- | Runs the JSON RPC protocol via a simple WebSocket server.
---   The client should include add a "session-id" (identifier chosen by client) value to the object in every call. 
+--   The client should add a "session-id" (identifier chosen by client) value to the object in every call. 
 --   Session state can be cleared with a special {"call": "cleanup", "session-id": <id>} message. There is no 
 --   auto-cleaning or memory limiting functionality. Reset the server to clear everything.
 --

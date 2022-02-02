@@ -1,5 +1,7 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, FunctionalDependencies, FlexibleContexts, MultiWayIf #-}
 
+-- | Model where agents periodically switch to a discoverable mode.
+--   Replaced by more general Signal model.
 module Model.Identification.PeriodicTrigger (PeriodicTriggerDiscoveryMethod (..)) where
 
 import Model.RNG

@@ -1,5 +1,7 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric #-}
 
+-- | Experimental identifcation model.
+
 module Model.Identification.Gaussian where
 
 import Model.Definitions

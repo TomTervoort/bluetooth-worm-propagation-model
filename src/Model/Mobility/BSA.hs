@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, FunctionalDependencies, FlexibleContexts, MultiWayIf #-}
 
--- | Simple Boundless simulation area model
---   TODO: delta t > 1
+-- | Simple Boundless Simulation Area model by Haas 
+--   See: https://ieeexplore.ieee.org/abstract/document/627227
 
 module Model.Mobility.BSA where
 

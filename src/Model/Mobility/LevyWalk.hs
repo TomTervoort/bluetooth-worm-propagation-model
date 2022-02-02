@@ -1,6 +1,7 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, FunctionalDependencies, FlexibleContexts, MultiWayIf, OverloadedStrings #-}
 
--- | Levy walk mobility model from https://ieeexplore.ieee.org/document/5750071
+-- | Levy walk mobility model by Rhee et al.
+--   See: https://ieeexplore.ieee.org/document/5750071
 
 module Model.Mobility.LevyWalk where
 

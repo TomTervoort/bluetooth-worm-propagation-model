@@ -1,8 +1,9 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, FunctionalDependencies, FlexibleContexts, MultiWayIf #-}
 
-module Model.Infection.Serial where
-
 -- | Serial infection model employed by Zyba et al.
+--   See: https://ieeexplore.ieee.org/abstract/document/5062067
+
+module Model.Infection.Serial where
 
 import Model.RNG
 import Model.Definitions

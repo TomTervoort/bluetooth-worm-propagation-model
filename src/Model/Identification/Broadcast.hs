@@ -3,6 +3,7 @@
 -- | Model where some agents periodically 'broadcast' their identity to a subset of collectors capable of receiving this 
 --   broadcast. Represents MAC address correlation by Wi-Fi snoopers.
 --   Currently uses a normal distribution to hand out broadcast frequencies.
+--   Replaced by more general Signal model.
 module Model.Identification.Broadcast where
 
 import Model.RNG

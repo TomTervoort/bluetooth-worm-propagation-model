@@ -4,6 +4,7 @@
 -- | Helper that specifies a simplified 'discovery model' which describes whether an agent is in a discoverable state 
 --   during a step.
 --   When an infected agent A is close to a discoverable agent B long enough, A will identify B.
+--   Replaced by more general Signal model.
 module Model.Identification.Discovery where
 
 import Model.Definitions

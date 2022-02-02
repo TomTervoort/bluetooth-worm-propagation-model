@@ -1,6 +1,12 @@
 {-# LANGUAGE RecordWildCards, TupleSections, TypeFamilies, DeriveAnyClass, DeriveGeneric, ScopedTypeVariables, 
              FunctionalDependencies, FlexibleContexts, FlexibleInstances, UndecidableInstances #-}
 
+-- | Collection of basic data types, type class definitions and some utility functions.
+--   The SimulationModel type class represents any type of non-deterministic step-by-step simulation model. Its 
+--   parameters represent the step inputs. Subclassess can add functions that observe the model state, which is used
+--   to represent intermediate outputs.
+--   The PropagationModel type is a SimulationModel that requires no inputs. It combines three instances of component 
+--   models into a full Bluetooth propagation model.
 module Model.Definitions where
 
 import Model.RNG

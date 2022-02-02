@@ -6,6 +6,7 @@
 --   where model-type is a string; options are hard-coded in supportedModels. 
 --   Simulate n steps with {"call": "steps", "amount": <n>}.
 --   Result contains {"status": "ok", "report": <report>}. The report format does not depend on the model type.
+--   Support for new component models can be added by extending the mobModels, idModels or infModels lists.
 module Model.UI.JSON where
 
 import Model.RNG
@@ -75,6 +76,7 @@ data InfModelProxy = forall m. InfectionModel m => InfModelProxy (Proxy m)
 data PropModelProxy = forall a b c. (MobilityModel a, IdentificationModel b, InfectionModel c) 
                     => PropModelProxy (Proxy (PropagationModel a b c))
 
+-- | Available mobility models.
 mobModels :: [(String, MobModelProxy)]
 mobModels = [
   ("bsa", MobModelProxy (Proxy :: Proxy BSAModel)),
@@ -85,6 +87,7 @@ mobModels = [
 type DiscoveryWithBroadcast m = ParallelModels (DiscoveryIdModel m) BroadcastModel
 type DiscoveryWithDoubleBroadcast m = ParallelModels3 (DiscoveryIdModel m) BroadcastModel BroadcastModel
 
+-- | Available identification models.
 idModels :: [(String, IdModelProxy)]
 idModels = [
   ("dummy", IdModelProxy (Proxy :: Proxy DummyIdModel)),
@@ -94,6 +97,7 @@ idModels = [
   ("trigger+broadcast2", IdModelProxy (Proxy :: Proxy (DiscoveryWithDoubleBroadcast PeriodicTriggerDiscoveryMethod)))
  ]
 
+-- | Available infection models.
 infModels :: [(String, InfModelProxy)]
 infModels = [
   ("simple", InfModelProxy (Proxy :: Proxy SimpleInfectionModel)),
